@@ -15,20 +15,18 @@
     <div class="full-screen login-wrapper" v-if="where === 0">
       <div class="login-panel  layout-center">
         <div class="row title">
-          登录游戏服务器
+          Login to game server
         </div>
         <div class="login-form">
-          <input type="text" class="input" placeholder="给自己取一个名字" v-model.trim="posState.self.name" @keyup.enter="login"><button
-            @click="login">确定</button>
+          <input type="text" class="input" placeholder="Give yourself a name" v-model.trim="posState.self.name" @keyup.enter="login"><button
+            @click="login">Confirm </button>
         </div>
       </div>
     </div>
-
-
-    <!-- 大厅 -->
+<!-- 大厅 -->
     <div class="full-screen house" v-if="where === 1">
       <div class="row text-right quick-bar">
-        <button @click="quickJoin">快速加入</button>
+        <button @click="quickJoin">Quick Join</button>
       </div>
       <div v-for="desk in desks" class="desk">
         <div v-for="position in desk.positions" class="position" :class="{has:position.state,position0:position.posId === 0,position1:position.posId === 1,position2:position.posId === 2}">
@@ -40,6 +38,7 @@
       </div>
     </div>
 
+  </div>
   <script src="/js/vue.min.js"></script>
   <script src="socket.io/socket.io.js"></script>
   <script src="/js/jquery.min.js"></script>
