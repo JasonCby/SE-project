@@ -11,7 +11,5 @@ npm install
 npm start
 ```
 
-![image](https://raw.githubusercontent.com/laivv/doudizhu/master/static/images/game2.jpg)  
-![image](https://raw.githubusercontent.com/laivv/doudizhu/master/static/images/game.jpg)
 ### License
 MIT
