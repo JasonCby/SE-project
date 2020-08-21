@@ -18,10 +18,14 @@
           Login to game server
         </div>
         <div class="login-form">
-          <input type="text" class="input" placeholder="Give yourself a name" v-model.trim="posState.self.name" @keyup.enter="login"><button
-            @click="login">Confirm </button>
-        </div>
-      </div>
+          <input type="text" class="input" placeholder="Username" v-model.trim="posState.self.name" @keyup.enter="login"><br>
+          <input type="text" class="input" placeholder="Password" v-model.trim="posState.self.password" @keyup.enter="login">
+          <button @click="login">Confirm</button>
+       </div>
+       <div class="row title">
+        No account, please register：<input type="button" name="register" value="Register" onclick="window.location.href='register.html'"/>
+       </div>
+     </div>
     </div>
 <!-- 大厅 -->
     <div class="full-screen house" v-if="where === 1">
