@@ -2,8 +2,6 @@
 Support for multiplayer online games
 ### install
 ```sh
-git clone git@github.com:laivv/doudizhu.git
-cd ./doudizhu
 npm install
 ```
 ### run
