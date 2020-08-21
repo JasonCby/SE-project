@@ -1,0 +1,42 @@
+section{
+	margin-right: 1%;
+	float: right;
+	width: 80%;
+	margin-top: 1%;
+	font-size: 140%;
+	padding-left: 3%;
+	box-shadow: 5px 5px 5px black;
+	padding-bottom: 3.5%;
+
+}
+
+body{
+	background-color: aqua;
+}
+
+section.forms{
+	padding-top:3%;
+	background-image: radial-gradient(circle, rgb(248,233,254),rgb(255,255,255));
+}
+
+label {
+   clear: left;
+   display: block;
+   float: left;
+   font-size: 0.9em;
+   margin: 7px 4% 7px 5px;
+   width: 40%;
+}
+
+input {
+   display: block;
+   float: left;
+   font-size: 0.9em;
+   margin: 7px 0px;
+   width: 50%;
+}
+
+img{
+	width: 150px;
+	float: left;
+}
