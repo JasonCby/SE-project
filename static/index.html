@@ -18,8 +18,9 @@
           Login to game server
         </div>
         <div class="login-form">
-          <input type="text" class="input" placeholder="Give yourself a name" v-model.trim="posState.self.name" @keyup.enter="login"><button
-            @click="login">Confirm </button>
+          <input type="text" class="input" placeholder="Your  name" v-model.trim="posState.self.name" @keyup.enter="login">
+          <input type="text" class="input" placeholder="Your password" v-model.trim="posState.self.password" @keyup.enter="login">
+          <button @click="login">Confirm </button>
         </div>
       </div>
     </div>
@@ -121,7 +122,8 @@
               isPass: false,
               isDizhu: false,
               callScore: -1,
-              name: ''
+              name: '',
+              password: ''
             }
           }
         }
@@ -379,13 +381,16 @@
       methods: {
         login: function () {
           if (!this.posState.self.name) {
-            return layer.msg('请输入名字');
+            return layer.msg('Please enter your name');
+          }
+          if (!this.posState.self.password) {
+            return layer.msg('Please enter your password');
           }
           if (this.posState.self.name.length > 10) {
-            return layer.msg('名字不超过10个字');
+            return layer.msg('Name no more than 10 words');
           }
           layer.load({ type: 3 });
-          this.client.emit('LOGIN', this.posState.self.name);
+          this.client.emit('LOGIN', { userName: this.posState.self.name, passWord: this.posState.self.password });
         },
         getDesk: function (deskId) {
           for (var i = 0, len = this.desks.length; i < len; i++) {

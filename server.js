@@ -7,6 +7,18 @@ app.get('/', function (req, res) {
   res.sendFile(`${__dirname}/index.html`);
 });
 const Game = require('./game.js');
+
+var mysql  = require('mysql');
+
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'Admin',
+  password : '741025',
+  port: '3306',
+  database: 'userinfo'
+});
+connection.connect();
+
 function createDeskList(n) {
   n = n || 50;
   const ret = [];
@@ -147,7 +159,7 @@ const proto = {
   getClient(socket) {
     for (let i = 0, len = this.clients.length; i < len; i++) {
       let client = this.clients[i];
-      if (client.socket == socket) {
+      if (client.socket === socket) {
         return client;
       }
     }
@@ -168,14 +180,32 @@ const proto = {
     }
     return null;
   },
-  checkUserName(userName) {
+   checkUserName(userName) {
     for (let i = 0, len = this.clients.length; i < len; i++) {
       if (this.clients[i].userName === userName) {
-        return false;
+        return 0;
       }
     }
-    return true;
+    var sql = 'SELECT name FROM userinfo';
+//查
+    var results
+    connection.query(sql, function (err, result) {
+      if (err) {
+        console.log('[SELECT ERROR] - ', err.message);
+        return;
+      }
+      var res
+      res = JSON.stringify(result);
+      res=JSON.parse(res);
+    })
+
+    if (userName !== results[0].name) {
+      console.log('Wrong information')
+      return 0;
+    }
+    return 1
   },
+
   checkPrepareAll(deskId) {
     const desk = this.getDesk(deskId);
     if (desk) {
@@ -201,16 +231,48 @@ const proto = {
   },
   init() {
     io.on('connection', socket => {
+      var conflict_status=0
       console.log('有客户端接入，时间： %s', time());
-      socket.on('LOGIN', userName => {
-        if (this.checkUserName(userName)) {
-          this.addClient(socket, { userName });
-          socket.emit('LOGIN_SUCCESS', this.desks);
-          console.log('有客户端登录，时间： %s', time());
-        } else {
-          socket.emit('LOGIN_FAIL', { msg: '该用户名已存在' });
+      socket.on('LOGIN', data => {
+        const { userName, passWord }= data
+        for (let i = 0, len = this.clients.length; i < len; i++) {
+          if (this.clients[i].userName === userName) {
+            console.log('该用户已登录');
+            socket.emit('LOGIN_FAIL', { msg: '该用户已登录' });
+            conflict_status=1;
+            break;
+          }
+        }
+        if(conflict_status===0)
+        {
+          var sql = 'SELECT password FROM userinfo where name= ' + connection.escape(userName);
+//查
+          connection.query(sql, function (err, result) {
+            if (err) {
+              console.log('[SELECT ERROR] - ', err.message);
+              return;
+            }
+            var res
+            res = JSON.stringify(result);
+            res = JSON.parse(res);
+            if(res.length ===0) {
+              socket.emit('LOGIN_FAIL', {msg: '该用户名不存在'})
+            }
+            else {
+              if (passWord === res[0].password) {
+                this.addClient(socket, {userName});
+                socket.emit('LOGIN_SUCCESS', this.desks);
+                console.log('有客户端登录，时间： %s', time());
+
+              } else {
+                console.log('Wrong information')
+                socket.emit('LOGIN_FAIL', {msg: '密码错误'});
+              }
+            }
+          }.bind(this))
         }
       });
+
 
       //快速加入
       socket.on('QUICK_JOIN', () => {
