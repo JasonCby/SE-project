@@ -231,10 +231,11 @@ const proto = {
   },
   init() {
     io.on('connection', socket => {
-      var conflict_status=0
+
       console.log('有客户端接入，时间： %s', time());
       socket.on('LOGIN', data => {
         const { userName, passWord }= data
+        var conflict_status=0
         for (let i = 0, len = this.clients.length; i < len; i++) {
           if (this.clients[i].userName === userName) {
             console.log('该用户已登录');
