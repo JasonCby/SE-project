@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>在线斗地主</title>
+  <title>Fight The Landlord</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 
@@ -19,6 +19,7 @@
         </div>
         <div class="login-form">
           <input type="text" class="input" placeholder="Your  name" v-model.trim="posState.self.name" @keyup.enter="login">
+          <p></p>
           <input type="text" class="input" placeholder="Your password" v-model.trim="posState.self.password" @keyup.enter="login">
           <button @click="login">Confirm </button>
         </div>
