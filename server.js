@@ -273,6 +273,9 @@ const proto = {
           }.bind(this))
         }
       });
+      socket.on('REGIST', function () {
+            socket.emit('START_REGIST');
+      });
 
 
       //快速加入

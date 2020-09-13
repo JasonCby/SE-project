@@ -22,8 +22,33 @@
           <p></p>
           <input type="text" class="input" placeholder="Your password" v-model.trim="posState.self.password" @keyup.enter="login">
           <button @click="login">Confirm </button>
+          <button @click="register_page">Register </button>
         </div>
       </div>
+    </div>
+    <!-- 注册界面 -->
+    <div class="full-screen register" v-if="where === 3">
+      <img class="image" alt="logo" src="./images/landlord.jpg">
+      <section class="section">
+        <h1>Register an Account to begin</h1>
+        <p>* - required information</p>
+        <form class="register form">
+          <fieldset>
+            <legend>Register</legend>
+            <label class="register label" for="uid">User Name *</label>
+            <input class="register input" name="uid" id="uid" v-model.trim="posState.self.name" @keyup.enter="register">
+            <label class="register label" for="email">email *</label>
+            <input class="register input" name="email" id="email"
+                   placeholder="nnn@nnn.nnn"
+                   pattern="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$" v-model.trim="posState.self.email" @keyup.enter="register">
+            <label class="register label" for="pwd1">Password *</label>
+            <input class="register input" name="pwd1" id="pwd1" v-model.trim="posState.self.password" @keyup.enter="register">
+            <label class="register label" for="pwd2">Confirm Password*</label>
+            <input class="register input" name="pwd2" id="pwd2" v-model.trim="posState.self.confirm" @keyup.enter="register">
+          </fieldset>
+          <button id="button" @click="register">Register new account</button>
+        </form>
+      </section>
     </div>
 <!-- 大厅 -->
     <div class="full-screen house" v-if="where === 1">
@@ -184,7 +209,7 @@
         </div> -->
         </div>
       </div>
-
+    </div>
   </div>
   <script src="/js/vue.min.js"></script>
   <script src="socket.io/socket.io.js"></script>
@@ -192,10 +217,6 @@
   <script src="/js/layer/layer.js"></script>
   <script src="/js/parser.js"></script>
   <script>
-
-
-
-
 
     function createClient(url) {
       var socket = io.connect('ws://' + url);
@@ -216,7 +237,7 @@
           ],
           msgList: [],//聊天消息
 
-          where: 0,//0登录界面 1大厅 2房间,
+          where: 0,//0登录界面 1大厅 2房间 3注册界面
           posId: '',//座位号
           deskId: '',//桌号
           desks: [],
@@ -269,7 +290,9 @@
               isDizhu: false,
               callScore: -1,
               name: '',
-              password: ''
+              password: '',
+              confirm: '',
+              email: ''
             }
           }
         }
@@ -292,6 +315,11 @@
           this.client.on('LOGIN_SUCCESS', function (data) {
             this.desks = data;
             this.where = 1;
+            layer.closeAll();
+          }.bind(this));
+
+          this.client.on('START_REGIST', function(){
+            this.where = 3;
             layer.closeAll();
           }.bind(this));
 
@@ -527,6 +555,7 @@
       methods: {
         login: function () {
           if (!this.posState.self.name) {
+            console.log("123")
             return layer.msg('Please enter your name');
           }
           if (!this.posState.self.password) {
@@ -538,6 +567,37 @@
           layer.load({ type: 3 });
           this.client.emit('LOGIN', { userName: this.posState.self.name, passWord: this.posState.self.password });
         },
+
+        register_page: function (){
+          this.client.emit('REGIST')
+        },
+
+        register: function (){
+          if (!this.posState.self.name) {
+            return layer.msg('Please enter your name');
+          }
+          if (!this.posState.self.password) {
+            return layer.msg('Please enter your password');
+          }
+          if (!this.posState.self.email) {
+            return layer.msg('Please enter your email');
+          }
+          if (this.posState.self.name.length > 10) {
+            return layer.msg('Name no more than 10 words');
+          }
+          if (this.posState.self.password !== this.posState.self.confirm) {
+            return layer.msg('Please confirm your right password');
+          }
+          else {
+            layer.load({type: 3});
+            this.client.emit('REGISTER', {
+              userName: this.posState.self.name,
+              passWord: this.posState.self.password,
+              email: this.posState.self.email
+            });
+          }
+        },
+
         getDesk: function (deskId) {
           for (var i = 0, len = this.desks.length; i < len; i++) {
             var desk = this.desks[i];
