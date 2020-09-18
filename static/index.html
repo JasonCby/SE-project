@@ -27,7 +27,7 @@
       </div>
     </div>
     <!-- 注册界面 -->
-    <div class="full-screen register" v-if="where === 3">
+    <div class="full-screen register" v-if="where === 1">
       <img class="image" alt="logo" src="./images/landlord.jpg">
       <section class="section">
         <h1>Register an Account to begin</h1>
@@ -46,12 +46,13 @@
             <label class="register label" for="pwd2">Confirm Password*</label>
             <input class="register input" name="pwd2" id="pwd2" v-model.trim="posState.self.confirm" @keyup.enter="register">
           </fieldset>
+          <p></p>
           <button id="button" @click="register">Register new account</button>
         </form>
       </section>
     </div>
 <!-- 大厅 -->
-    <div class="full-screen house" v-if="where === 1">
+    <div class="full-screen house" v-if="where === 2">
       <div class="row text-right quick-bar">
         <button @click="quickJoin">Quick Join</button>
       </div>
@@ -65,7 +66,7 @@
       </div>
     </div>
     <!-- 房间 -->
-    <div class="full-screen room" v-if="where === 2">
+    <div class="full-screen room" v-if="where === 3">
       <button class="btn-exit-room" @click="exitRoom">Return game hall</button>
 
       <div class="btn-group" v-if="roomState.state > 0 && roomState.state < 3 && roomState.ctxPos === 'self'">
@@ -314,12 +315,12 @@
 
           this.client.on('LOGIN_SUCCESS', function (data) {
             this.desks = data;
-            this.where = 1;
+            this.where = 2;
             layer.closeAll();
           }.bind(this));
 
           this.client.on('START_REGIST', function(){
-            this.where = 3;
+            this.where = 1;
             layer.closeAll();
           }.bind(this));
 
@@ -339,7 +340,7 @@
 
 
           this.client.on('SITDOWN_SUCCESS', function (data) {
-            this.where = 2;
+            this.where = 3;
             this.posId = data.posId;
             this.deskId = data.deskId;
             data.posInfos.forEach(function (pos) {
@@ -555,7 +556,7 @@
       methods: {
         login: function () {
           if (!this.posState.self.name) {
-            console.log("123")
+            console.log("1234")
             return layer.msg('Please enter your name');
           }
           if (!this.posState.self.password) {
@@ -574,6 +575,7 @@
 
         register: function (){
           if (!this.posState.self.name) {
+            console.log("1234")
             return layer.msg('Please enter your name');
           }
           if (!this.posState.self.password) {
@@ -722,7 +724,7 @@
           layer.load({ type: 3 });
         },
         resetRoomStatus: function () {
-          this.where = 1;
+          this.where = 2;
           this.posId = '';
           this.deskId = '';
           this.posState.self.state = 0;

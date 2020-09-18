@@ -18,9 +18,15 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/360" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="Console" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RunManager">
     <configuration name="server.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/server.js" working-dir="$PROJECT_DIR$">
@@ -47,6 +53,8 @@
       <workItem from="1599626355011" duration="10470000" />
       <workItem from="1599641602090" duration="1244000" />
       <workItem from="1599894703821" duration="1501000" />
+      <workItem from="1599981370406" duration="3234000" />
+      <workItem from="1599984743165" duration="1909000" />
     </task>
     <servers />
   </component>
@@ -122,10 +130,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="348" key="GridCell.Tab.3.right/0.0.1920.1040@0.0.1920.1040" timestamp="1598028795674" />
-    <state x="461" y="164" key="SettingsEditor" timestamp="1599636534622">
+    <state x="461" y="164" key="SettingsEditor" timestamp="1599982523473">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1599636534622" />
+    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1599982523473" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1599636522424">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
