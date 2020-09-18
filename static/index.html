@@ -319,12 +319,19 @@
             layer.closeAll();
           }.bind(this));
 
-          this.client.on('START_REGIST', function(){
+          this.client.on('START_REGIST', function(data){
             this.where = 1;
             layer.closeAll();
+            layer.msg(data.msg);
           }.bind(this));
 
           this.client.on('LOGIN_FAIL', function (data) {
+            layer.closeAll();
+            layer.msg(data.msg);
+          }.bind(this));
+
+          this.client.on('REGISTER_FAIL', function (data) {
+            this.where = 1;
             layer.closeAll();
             layer.msg(data.msg);
           }.bind(this));

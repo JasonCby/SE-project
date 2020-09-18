@@ -274,7 +274,7 @@ const proto = {
         }
       });
       socket.on('REGIST', function () {
-            socket.emit('START_REGIST');
+            socket.emit('START_REGIST',{msg: '开始注册'});
       });
 
       socket.on('REGISTER', data => {
@@ -294,7 +294,7 @@ const proto = {
 //插入
           connection.query(sql, function (err, result) {
             if (err) {
-              socket.emit('LOGIN_FAIL', {msg: '该用户名已存在'})
+              socket.emit('REGISTER_FAIL', {msg: '该用户名已存在'})
               console.log('该用户名已存在');
               return;
             }
