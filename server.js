@@ -277,6 +277,36 @@ const proto = {
             socket.emit('START_REGIST');
       });
 
+      socket.on('REGISTER', data => {
+        const { userName, passWord, email }= data
+        var conflict_status=0
+        for (let i = 0, len = this.clients.length; i < len; i++) {
+          if (this.clients[i].userName === userName) {
+            console.log('该用户已存在');
+            socket.emit('LOGIN_FAIL', { msg: '该用户已存在' });
+            conflict_status=1;
+            break;
+          }
+        }
+        if(conflict_status===0)
+        {
+          var sql = 'INSERT into userinfo (name, password) values( ' + connection.escape(userName) + ',' + connection.escape(passWord) + ')';
+//插入
+          connection.query(sql, function (err, result) {
+            if (err) {
+              socket.emit('LOGIN_FAIL', {msg: '该用户名已存在'})
+              console.log('该用户名已存在');
+              return;
+            }
+
+            else {
+                this.addClient(socket, {userName});
+                socket.emit('LOGIN_SUCCESS', this.desks);
+                console.log('有客户端登录，时间： %s', time());
+            }
+          }.bind(this))
+        }
+      });
 
       //快速加入
       socket.on('QUICK_JOIN', () => {
