@@ -253,7 +253,47 @@
             background: #fff;
             overflow: auto;
         }
-
+        .register{
+            background: #ccc;
+            padding-top: 0%;
+        }
+        .section{
+            background-color: aqua;
+             margin-right: 1%;
+             float: right;
+             width: 80%;
+             margin-top: 1%;
+             font-size: 140%;
+             padding-left: 3%;
+             box-shadow: 5px 5px 5px black;
+             padding-bottom: 3.5%;
+        }
+        .register.form{
+            background-image: radial-gradient(circle, rgb(248,233,254),rgb(255,255,255));
+        }
+         .register.label {
+             clear: left;
+             display: block;
+             float: left;
+             font-size: 0.9em;
+             margin: 7px 4% 7px 5px;
+             width: 20%;
+             background-color: rgba(0,0,0,0);
+         }
+        .register.input {
+             display: block;
+             float: left;
+             font-size: 0.9em;
+             margin: 7px 0px;
+             width: 50%;
+         }
+        #button{
+            margin-left: 40%;
+        }
+        .image{
+            width: 15%;
+            float: left;
+        }
         .house {
             background: #555;
             padding-top:40px;
