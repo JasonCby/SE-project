@@ -18,9 +18,9 @@
           Login to game server
         </div>
         <div class="login-form">
-          <input type="text" class="input" placeholder="Your  name" v-model.trim="posState.self.name" @keyup.enter="login">
+          <input type="text" class="input" placeholder="Your  name" v-model.trim="posState.self.name" @keyup.enter="login" required="required">
           <p></p>
-          <input type="password" class="input" placeholder="Your password" v-model.trim="posState.self.password" @keyup.enter="login">
+          <input type="password" class="input" placeholder="Your password" v-model.trim="posState.self.password" @keyup.enter="login" required="required">
           <button @click="login">Confirm </button>
           <button @click="register_page">Register </button>
         </div>
@@ -36,15 +36,15 @@
           <fieldset>
             <legend>Register</legend>
             <label class="register label" for="uid">User Name *</label>
-            <input class="register input" name="uid" id="uid" v-model.trim="posState.self.name" @keyup.enter="register">
+            <input class="register input" name="uid" id="uid" v-model.trim="posState.self.name" @keyup.enter="register" required="required">
             <label class="register label" for="email">email *</label>
             <input class="register input" name="email" id="email"
                    placeholder="nnn@nnn.nnn"
-                   pattern="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$" v-model.trim="posState.self.email" @keyup.enter="register">
+                   pattern="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$" v-model.trim="posState.self.email" @keyup.enter="register" required="required">
             <label class="register label" for="pwd1">Password *</label>
-            <input type="password" class="register input" name="pwd1" id="pwd1" v-model.trim="posState.self.password" @keyup.enter="register">
+            <input type="password" class="register input" name="pwd1" id="pwd1" v-model.trim="posState.self.password" @keyup.enter="register" required="required">
             <label class="register label" for="pwd2">Confirm Password*</label>
-            <input type="password" class="register input" name="pwd2" id="pwd2" v-model.trim="posState.self.confirm" @keyup.enter="register">
+            <input type="password" class="register input" name="pwd2" id="pwd2" v-model.trim="posState.self.confirm" @keyup.enter="register" required="required">
           </fieldset>
           <p></p>
           <button id="button" @click="register">Register new account</button>
