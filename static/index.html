@@ -210,24 +210,7 @@
         </div> -->
         </div>
       </div>
-      <div class="msg-box">
-        <div class="msg-list scroll-bar" ref="msgBox">
-          <div class="msg-item" v-for="msg in msgList" :key="msg.id">
-            <span v-if="msg.type === 'USER'">
-              <span class="msg-item-time">[{{msg.time}}]</span>
-              <span style="color:#ff0000">{{msg.name}}</span> 说：{{msg.content}}
-            </span>
-            <span style="color:red;padding:15px 0" v-if="msg.type === 'SYS'">
-              <span class="msg-item-time">[{{msg.time}}] </span>系统消息：{{msg.content}}
-            </span>
-          </div>
-        </div>
-        <input type="text" class="input msg-input" ref="msgInput" @keyup.enter="sendMessage(false)">
-        <select ref="msgSelect" class="input msg-input msg-select" style="width:15px;" @change="sendMessage($event)">
-          <option v-for="item in msgBox" :value="item">{{item}}</option>
-        </select>
-        <button class="msg-btn" @click="sendMessage(false)">发送</button>
-      </div>
+
     </div>
 
   </div>
