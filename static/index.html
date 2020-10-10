@@ -72,12 +72,12 @@
       <div class="btn-group" v-if="roomState.state > 0 && roomState.state < 3 && roomState.ctxPos === 'self'">
         <span class="clock">{{roomState.timeout}}</span>
         <template v-if="roomState.state === 1">
-          <button class="btn btn-call" v-for="score in roomState.ctxScore" @click="callScore(score)">{{score}}分</button>
-          <button class="btn btn-call" @click="callScore(0)">不叫</button>
+          <button class="btn btn-call" v-for="score in roomState.ctxScore" @click="callScore(score)">{{score}}Score</button>
+          <button class="btn btn-call" @click="callScore(0)">Don't call</button>
         </template>
         <template v-if="roomState.state === 2">
-          <button class="btn" @click="playCards">出牌</button>
-          <button class="btn" @click="passCards" v-if="roomState.ctxCard.ctxPos !== roomState.ctxPos">不出</button>
+          <button class="btn" @click="playCards">Play</button>
+          <button class="btn" @click="passCards" v-if="roomState.ctxCard.ctxPos !== roomState.ctxPos">Discard</button>
         </template>
 
       </div>
@@ -120,7 +120,7 @@
           <div class="icon-group icon-group-right text-right" v-if="roomState.ctxPos == 'right' && roomState.state < 3">
             <span class="clock">{{roomState.timeout}}</span>
           </div>
-          <div class="text-tips text-tips-right text-right" v-if="roomState.state < 3">剩余：{{posState.right.cards.length}}张</div>
+          <div class="text-tips text-tips-right text-right" v-if="roomState.state < 3">Remaining：{{posState.right.cards.length}}pieces</div>
         </div>
         <!-- 底牌列表 -->
         <div class="card-group card-group-top" :style="{width:posState.top.cards.length * 20 + 70 + 'px'}">
@@ -145,7 +145,7 @@
             </div>
           </template>
           <span class="score-tipe" v-if="roomState.state == 1 && posState.left.callScore > -1">{{posState.left.callScore
-          > 0 ? posState.left.callScore + '分' : '不叫' }}</span>
+          > 0 ? posState.left.callScore + 'Score' : "Don't call" }}</span>
 
         </div>
         <!-- 自己的出牌区域 -->
@@ -160,7 +160,7 @@
           </template>
           <span class="score-tipe" v-if="roomState.state == 1 && posState.self.callScore > -1">
             {{posState.self.callScore
-          > 0 ? posState.self.callScore + '分' : '不叫' }}
+          > 0 ? posState.self.callScore + 'Score' : "Don't call" }}
           </span>
 
         </div>
@@ -175,7 +175,7 @@
             </div>
           </template>
           <span class="score-tipe" v-if="roomState.state == 1 && posState.right.callScore > -1">{{posState.right.callScore
-          > 0 ? posState.right.callScore + '分' : '不叫' }}</span>
+          > 0 ? posState.right.callScore + 'Score' : "Don't call" }}</span>
 
         </div>
       </div>
@@ -185,7 +185,7 @@
           <div class="player-wrapper player-left" v-if="posState.left.state">
             <div class="player-photo" :class="{'player-photo-king':posState.left.isDizhu}"></div>
             <div class="player-name text-center">{{posState.left.name}}</div>
-            <div class="text-center player-status" v-if="posState.left.state === 2 && (roomState.state === 0 || roomState.state === 3)">准备</div>
+            <div class="text-center player-status" v-if="posState.left.state === 2 && (roomState.state === 0 || roomState.state === 3)">Ready</div>
             <!-- <div class="text-center" v-if="posState.left.isDizhu">
             <img src="images/dizhu.png" alt="">
           </div> -->
@@ -193,7 +193,7 @@
           <div class="player-wrapper player-right" v-if="posState.right.state">
             <div class="player-photo" :class="{'player-photo-king':posState.right.isDizhu}"></div>
             <div class="player-name text-center">{{posState.right.name}}</div>
-            <div class="text-center player-status" v-if="posState.right.state === 2 && (roomState.state === 0 || roomState.state === 3)">准备</div>
+            <div class="text-center player-status" v-if="posState.right.state === 2 && (roomState.state === 0 || roomState.state === 3)">Ready</div>
             <!-- <div class="text-center" v-if="posState.right.isDizhu">
             <img src="images/dizhu.png" alt="">
           </div> -->
@@ -204,7 +204,7 @@
         <div class="player-wrapper player-self" v-if="roomState.state === 0 || (roomState.state === 3 && posState.self.state === 2)">
           <div class="player-photo" :class="{'player-photo-king':posState.self.isDizhu}"></div>
           <div class="player-name text-center">{{posState.self.name}}</div>
-          <div class="text-center player-status" v-if="posState.self.state === 2 && (roomState.state === 0 || roomState.state === 3)">准备</div>
+          <div class="text-center player-status" v-if="posState.self.state === 2 && (roomState.state === 0 || roomState.state === 3)">Ready</div>
           <!-- <div class="text-center" v-if="posState.self.isDizhu">
           <img src="images/dizhu.png" alt="">
         </div> -->
@@ -216,10 +216,10 @@
           <div class="msg-item" v-for="msg in msgList" :key="msg.id">
             <span v-if="msg.type === 'USER'">
               <span class="msg-item-time">[{{msg.time}}]</span>
-              <span style="color:#ff0000">{{msg.name}}</span> 说：{{msg.content}}
+              <pre class="pre"><span style="color:#ff0000">{{msg.name}}</span> says：{{msg.content}}</pre>
             </span>
             <span style="color:red;padding:15px 0" v-if="msg.type === 'SYS'">
-              <span class="msg-item-time">[{{msg.time}}] </span>系统消息：{{msg.content}}
+              <span class="msg-item-time">[{{msg.time}}] </span><pre class="pre">System message：{{msg.content}}</pre>
             </span>
           </div>
         </div>
@@ -227,7 +227,7 @@
         <select ref="msgSelect" class="input msg-input msg-select" style="width:15px;" @change="sendMessage($event)">
           <option v-for="item in msgBox" :value="item">{{item}}</option>
         </select>
-        <button class="msg-btn" @click="sendMessage(false)">发送</button>
+        <button class="msg-btn" @click="sendMessage(false)">Send</button>
       </div>
     </div>
 
@@ -249,8 +249,8 @@
       data: function () {
         return {
           msgBox: [
-            '你的牌打得太好了',
-            '快点吧，我等到花儿也谢了！',
+            'You play your cards too well',
+            'Hurry up, I wait till the flowers are gone!',
             '不要走，决战到天亮。',
             '和你合作真是太愉快了',
             '你是GG还是MM？',

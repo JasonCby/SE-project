@@ -6,7 +6,7 @@ function arraySort(array, asc) {
 }
 
 
-//计算数组中每个成员出现的次数，返回一个去重的次数数组
+//Counts the number of occurrences of each member in the array, and returns an array of deweights
 function getCountArrayForGroupByCard(array, asc) {
     var ret = getGroupByCard(array);
     var r = [];
@@ -17,7 +17,7 @@ function getCountArrayForGroupByCard(array, asc) {
     return r;
 }
 
-//统计数组中每个成员出现的次数
+//Count the number of occurrences of each member in the array
 function getGroupByCard(array) {
     var ret = {};
     array.forEach(function (item) {

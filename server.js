@@ -10,6 +10,14 @@ const Game = require('./game.js');
 
 var mysql  = require('mysql');
 
+// var connection = mysql.createConnection({
+//   host     : 'cdb-o7lot9l2.cd.tencentcdb.com',
+//   user     : 'Admin',
+//   password : 'cby741025',
+//   port: '10171',
+//   database: 'userinfo'
+// });
+
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'Admin',
@@ -232,14 +240,14 @@ const proto = {
   init() {
     io.on('connection', socket => {
 
-      console.log('有客户端接入，时间： %s', time());
+      console.log('Client access is available. Time: %s', time());
       socket.on('LOGIN', data => {
         const { userName, passWord }= data
         var conflict_status=0
         for (let i = 0, len = this.clients.length; i < len; i++) {
           if (this.clients[i].userName === userName) {
-            console.log('该用户已登录');
-            socket.emit('LOGIN_FAIL', { msg: '该用户已登录' });
+            console.log('The user is logged in');
+            socket.emit('LOGIN_FAIL', { msg: 'The user is logged in' });
             conflict_status=1;
             break;
           }
@@ -257,24 +265,24 @@ const proto = {
             res = JSON.stringify(result);
             res = JSON.parse(res);
             if(res.length ===0) {
-              socket.emit('LOGIN_FAIL', {msg: '该用户名不存在'})
+              socket.emit('LOGIN_FAIL', {msg: 'The user name does not exist'})
             }
             else {
               if (passWord === res[0].password) {
                 this.addClient(socket, {userName});
                 socket.emit('LOGIN_SUCCESS', this.desks);
-                console.log('有客户端登录，时间： %s', time());
+                console.log('Client access is available. Time: %s', time());
 
               } else {
                 console.log('Wrong information')
-                socket.emit('LOGIN_FAIL', {msg: '密码错误'});
+                socket.emit('LOGIN_FAIL', {msg: 'Wrong password'});
               }
             }
           }.bind(this))
         }
       });
       socket.on('REGIST', function () {
-            socket.emit('START_REGIST',{msg: '开始注册'});
+            socket.emit('START_REGIST',{msg: 'Began to register'});
       });
 
       socket.on('REGISTER', data => {
@@ -282,8 +290,8 @@ const proto = {
         var conflict_status=0
         for (let i = 0, len = this.clients.length; i < len; i++) {
           if (this.clients[i].userName === userName) {
-            console.log('该用户已存在');
-            socket.emit('LOGIN_FAIL', { msg: '该用户已存在' });
+            console.log('The user already exists');
+            socket.emit('LOGIN_FAIL', { msg: 'The user already exists' });
             conflict_status=1;
             break;
           }
@@ -294,15 +302,15 @@ const proto = {
 //插入
           connection.query(sql, function (err, result) {
             if (err) {
-              socket.emit('REGISTER_FAIL', {msg: '该用户名已存在'})
-              console.log('该用户名已存在');
+              socket.emit('REGISTER_FAIL', {msg: 'The user already exists'})
+              console.log('The user already exists');
               return;
             }
 
             else {
                 this.addClient(socket, {userName});
                 socket.emit('LOGIN_SUCCESS', this.desks);
-                console.log('有客户端登录，时间： %s', time());
+                console.log('Client access is available. Time:  %s', time());
             }
           }.bind(this))
         }
@@ -346,7 +354,7 @@ const proto = {
         const { deskId, posId } = data;
         //检查该座位是否是空闲状态
         if (this.isEmptyPos(deskId, posId)) {
-          console.log('有客户端进入房间，桌号：%s，座位：%s，时间： %s', deskId, posId, time());
+          console.log('A client enters the room，Desk：%s，Seat：%s，Time： %s', deskId, posId, time());
           //更新座位状态为占用
           this.updatePosStatus(deskId, posId, 1, this.getUserName(socket));
           //绑定客户端桌号，座位号
@@ -362,11 +370,11 @@ const proto = {
           this.broadCastRoom("POS_STATUS_CHANGE", deskId, { posId, state: 1, userName: this.getUserName(socket) }, socket);
 
           //推送一条无关紧要的消息
-          socket.emit('USER_MESSAGE', { type: 'SYS', posId, msg: '欢迎您加入本房间，祝您游戏愉快！', id: guid(), time: time() });
-          this.broadCastRoom('USER_MESSAGE', deskId, { type: 'SYS', posId, msg: `玩家[${this.getUserName(socket)}]进入房间`, id: guid(), time: time() }, socket);
+          socket.emit('USER_MESSAGE', { type: 'SYS', posId, msg: 'Welcome to join the room, wish you a pleasant game!', id: guid(), time: time() });
+          this.broadCastRoom('USER_MESSAGE', deskId, { type: 'SYS', posId, msg: `The player[${this.getUserName(socket)}]enters the room`, id: guid(), time: time() }, socket);
         } else {
           //通知该客户端此座位被人占用
-          socket.emit('SITDOWN_ERROR', { msg: '该位置已有人' });
+          socket.emit('SITDOWN_ERROR', { msg: 'The position is taken' });
           //由于当前位置被占用可能是由于该客户端数据不同步造成，所以再次向该客户端推送一次所有桌数据
           socket.emit('REFRESH_LIST', this.desks);
         }
@@ -381,7 +389,7 @@ const proto = {
         if (!deskId) {
           return;
         }
-        console.log('有客户端退出房间，桌号：%s，座位：%s，时间：', deskId, posId, time());
+        console.log('Client exits the room，Desk：%s，Seat：%s，Time：%s', deskId, posId, time());
         //更新座位状态
         this.updatePosStatus(deskId, posId, 0, '');
         //重置房间状态
@@ -409,7 +417,7 @@ const proto = {
             //通知其它两位玩家重置房间状态
             this.broadCastRoom('ROOM_STATUS_CHANGE', deskId, { state: 0 });
             //通知其它两位玩家当前玩家逃跑
-            this.broadCastRoom('FORCE_EXIT_EV', deskId, { msg: '有玩家逃跑，游戏结束', posId });
+            this.broadCastRoom('FORCE_EXIT_EV', deskId, { msg: 'Player runs away, game over', posId });
 
             game.init();
 
@@ -420,7 +428,7 @@ const proto = {
 
 
         //推送一条无关紧要的消息
-        this.broadCastRoom('USER_MESSAGE', deskId, { type: 'SYS', posId, msg: `玩家[${this.getUserName(socket)}]退出房间`, id: guid(), time: time() })
+        this.broadCastRoom('USER_MESSAGE', deskId, { type: 'SYS', posId, msg: `Player[${this.getUserName(socket)}]exits the room`, id: guid(), time: time() })
       });
 
       socket.on('PREPARE', data => {
@@ -486,10 +494,10 @@ const proto = {
           })
         }
         if (status == 4) {
-          this.broadCastRoom('MESSAGE', deskId, { msg: '没有玩家叫分，重新发牌' });
+          this.broadCastRoom('MESSAGE', deskId, { msg: 'No player calls, redeal' });
           this.startGame(deskId);
           //推送一条无关紧要的消息
-          this.broadCastRoom('USER_MESSAGE', deskId, { type: 'SYS', posId, msg: '本局游戏无人叫分，重新发牌', id: guid(), time: time() })
+          this.broadCastRoom('USER_MESSAGE', deskId, { type: 'SYS', posId, msg: 'There is no bid. Deal again', id: guid(), time: time() })
 
         }
       });
@@ -530,7 +538,7 @@ const proto = {
             }
 
             if (game.getStatus() === 5) {
-              socket.emit('PLAY_CARD_ERROR', '游戏出错')
+              socket.emit('PLAY_CARD_ERROR', 'The game goes wrong')
             }
           } else {
             socket.emit('PLAY_CARD_ERROR', data)
@@ -575,16 +583,16 @@ const proto = {
               //通知其它两位玩家重置房间状态
               this.broadCastRoom('ROOM_STATUS_CHANGE', deskId, { state: 0 });
               //通知其它两位玩家当前玩家逃跑
-              this.broadCastRoom('FORCE_EXIT_EV', deskId, { msg: '有玩家逃跑，游戏结束', posId });
+              this.broadCastRoom('FORCE_EXIT_EV', deskId, { msg: 'Player runs away, game over', posId });
               game.init();
             }
           }
           //推送一条无关紧要的消息
-          this.broadCastRoom('USER_MESSAGE', deskId, { type: 'SYS', posId, msg: `玩家[${userName}]退出房间`, id: guid(), time: time() })
-          console.log('有客户端退出房间，桌号：%s，座位：%s，时间：', deskId, posId, time());
+          this.broadCastRoom('USER_MESSAGE', deskId, { type: 'SYS', posId, msg: `Player[${userName}]exits the room`, id: guid(), time: time() })
+          console.log('Client exits the room，Desk：%s，Seat：%s，Time：%s', deskId, posId, time());
         }
 
-        console.log('有客户端断开了连接 %s', time());
+        console.log('A client is disconnected %s', time());
       })
 
       socket.on('USER_MESSAGE', msg => {

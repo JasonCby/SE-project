@@ -1,7 +1,7 @@
 var validator = require('./core-validator');
 
 
-//获取 0-num范围的随机整数
+//Gets a random integer in the 0-NUM range
 function getRandomNumForRange(num) {
   return Math.round(Math.random() * num);
 }
