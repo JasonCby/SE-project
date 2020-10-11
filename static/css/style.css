@@ -1,6 +1,12 @@
  body {
             font-family: "microsoft yahei";
         }
+ pre{
+     display: block;
+     font-family: monospace;
+     white-space: pre-line;
+     margin: 1em 0px;
+ }
 [v-cloak]{
     display: none;
 }
@@ -644,6 +650,8 @@
         }
         .input.msg-input{
             height: 22px;
+            white-space:pre;
+            word-spacing: 5px;
         }
         .msg-btn{
             height: 22px;
@@ -663,7 +671,8 @@
         .msg-item{
             padding: 5px 0;
             max-width: 220px;
-            word-break: break-all;
+            white-space: pre-line;
+            word-break: keep-all;
         }
         .msg-item-time{
             padding-right: 10px;
