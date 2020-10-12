@@ -82,7 +82,7 @@
 
       </div>
 
-      <button v-if="posState.self.state < 2" @click="prepare" class="btn-prepare">准备</button>
+      <button v-if="posState.self.state < 2" @click="prepare" class="btn-prepare">Ready</button>
 
       <div class="card-groups" v-if="roomState.state">
 
@@ -95,7 +95,7 @@
           <div class="player-wrapper player-self-ctx">
             <div class="player-photo" :class="{'player-photo-king':posState.self.isDizhu}"></div>
             <div class="player-name text-center">{{posState.self.name}}</div>
-            <div class="text-center player-status" v-if="posState.self.state === 2 && (roomState.state === 0 || roomState.state === 3)">准备</div>
+            <div class="text-center player-status" v-if="posState.self.state === 2 && (roomState.state === 0 || roomState.state === 3)">Ready</div>
             <!-- <div class="text-center" v-if="posState.self.isDizhu">
              <img src="images/dizhu.png" alt="">
            </div> -->
@@ -109,7 +109,11 @@
           <div class="icon-group icon-group-left text-left" v-if="roomState.ctxPos == 'left' && roomState.state < 3">
             <span class="clock">{{roomState.timeout}}</span>
           </div>
+<<<<<<< HEAD
           <div class="text-tips text-tips-left text-left" v-if="roomState.state < 3">Remain:{{posState.left.cards.length}}cards</div>
+=======
+          <div class="text-tips text-tips-left text-left" v-if="roomState.state < 3">Remaining: {{posState.left.cards.length}}card</div>
+>>>>>>> 6c511c4aeba807bde8830dc38a9d79abc2ba61cd
 
         </div>
         <!-- 右家的牌列表 -->
@@ -141,7 +145,7 @@
                  class="card" :class="'card-' + card.value + '-' + card.type" :style="{left:index * 20 + 'px'}">
             </div>
             <div v-if="posState.left.isPass" class="score-tipe">
-              不出
+              Pass
             </div>
           </template>
           <span class="score-tipe" v-if="roomState.state == 1 && posState.left.callScore > -1">{{posState.left.callScore
@@ -155,7 +159,7 @@
                  class="card" :class="'card-' + card.value + '-' + card.type" :style="{left:index * 20 + 'px'}">
             </div>
             <div v-if="posState.self.isPass" class="score-tipe">
-              不出
+              Pass
             </div>
           </template>
           <span class="score-tipe" v-if="roomState.state == 1 && posState.self.callScore > -1">
@@ -292,7 +296,7 @@
               isPass: false,
               isDizhu: false,
               callScore: -1,
-              name: '游客'
+              name: 'Player'
             },
             right: {
               state: 0,//0没人，1未准备 2准备
@@ -301,7 +305,7 @@
               isPass: false,
               isDizhu: false,
               callScore: -1,
-              name: '游客'
+              name: 'Player'
             },
             self: {
               state: 0,//0没人，1未准备 2准备
@@ -361,7 +365,7 @@
               this.client.emit('SITDOWN', { deskId: data.deskId, posId: data.posId })
             } else {
               layer.closeAll();
-              layer.msg('快速加入失败');
+              layer.msg('Quick join failed');
             }
           }.bind(this));
 
@@ -510,7 +514,7 @@
           }.bind(this));
 
           this.client.on('PLAY_CARD_ERROR', function (data) {
-            layer.msg('你的牌不符合规则');
+            layer.msg('Your card does not meet the rules');
           }.bind(this))
           this.client.on('PLAY_CARD_SUCCESS', function (cards) {
             this.removeCards('self', cards);
@@ -518,26 +522,26 @@
           }.bind(this))
 
           this.client.on('GAME_OVER', function (data) {
-            var msg = data.winner.indexOf(this.posId) > - 1 ? '恭喜你，你赢了' : '很遗憾，你输了';
+            var msg = data.winner.indexOf(this.posId) > - 1 ? 'Congratulations, you won' : 'Sorry you lost';
             var icon = data.winner.indexOf(this.posId) > - 1 ? 6 : 5;
 
 
-            var content = '<div class="msg-title msg-' + (icon === 6 ? 'success' : 'fail') + '">' + msg + '</div><div>本局游戏统计如下：</div>';
+            var content = '<div class="msg-title msg-' + (icon === 6 ? 'success' : 'fail') + '">' + msg + '</div><div>The game statistics of this game are as follows：</div>';
             var score = data.score * data.ratio * 2;
             var halfScore = score / 2;
             data.winner.forEach(function (id) {
               var direct = this.getDirectionByPosId(id);
-              content += '<div>' + this.posState[direct].name + '：+' + (score / data.winner.length) + '分</div>';
+              content += '<div>' + this.posState[direct].name + '：+' + (score / data.winner.length) + 'point</div>';
             }.bind(this));
             data.loser.forEach(function (id) {
               var direct = this.getDirectionByPosId(id);
-              content += '<div>' + this.posState[direct].name + '：-' + (score / data.loser.length) + '分</div>';
+              content += '<div>' + this.posState[direct].name + '：-' + (score / data.loser.length) + 'point</div>';
             }.bind(this));
 
 
             layer.open({
               icon: icon,
-              title: '本局结果',
+              title: 'Result',
               content: content
             });
 
@@ -790,13 +794,13 @@
             return;
           }
           if (this.roomState.ctxPos !== 'self') {
-            return //layer.msg('未到出牌时间');
+            return //layer.msg('No card time');
           }
 
           var cards = this.getSelectdCards();
           var ret = validate(cards);
           if (!ret.status) {
-            return layer.msg('你的牌不符合规则');
+            return layer.msg('Your card does not meet the rules');
           }
 
           this.client.emit('PLAY_CARD', cards);
