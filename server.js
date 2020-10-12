@@ -620,3 +620,7 @@ const proto = {
 Object.assign(GameServer.prototype, proto);
 const gameServer = new GameServer(8001);
 gameServer.init();
+exports.time = time;
+exports.createDeskList = createDeskList;
+exports.proto = proto;
+exports.GameServer = GameServer;

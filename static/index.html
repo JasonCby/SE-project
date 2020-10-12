@@ -109,7 +109,7 @@
           <div class="icon-group icon-group-left text-left" v-if="roomState.ctxPos == 'left' && roomState.state < 3">
             <span class="clock">{{roomState.timeout}}</span>
           </div>
-          <div class="text-tips text-tips-left text-left" v-if="roomState.state < 3">剩余：{{posState.left.cards.length}}张</div>
+          <div class="text-tips text-tips-left text-left" v-if="roomState.state < 3">Remain:{{posState.left.cards.length}}cards</div>
 
         </div>
         <!-- 右家的牌列表 -->
@@ -120,7 +120,7 @@
           <div class="icon-group icon-group-right text-right" v-if="roomState.ctxPos == 'right' && roomState.state < 3">
             <span class="clock">{{roomState.timeout}}</span>
           </div>
-          <div class="text-tips text-tips-right text-right" v-if="roomState.state < 3">Remaining：{{posState.right.cards.length}}pieces</div>
+          <div class="text-tips text-tips-right text-right" v-if="roomState.state < 3">Remain:{{posState.right.cards.length}}cards</div>
         </div>
         <!-- 底牌列表 -->
         <div class="card-group card-group-top" :style="{width:posState.top.cards.length * 20 + 70 + 'px'}">
@@ -171,7 +171,7 @@
                  class="card" :class="'card-' + card.value + '-' + card.type" :style="{left:index * 20 + 'px'}">
             </div>
             <div v-if="posState.right.isPass" class="score-tipe">
-              不出
+              Pass
             </div>
           </template>
           <span class="score-tipe" v-if="roomState.state == 1 && posState.right.callScore > -1">{{posState.right.callScore

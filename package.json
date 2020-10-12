@@ -4,15 +4,42 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "nyc mocha "
   },
+  "nyc": {
+    "include": [
+      "test/*.js"
+    ],
+    "extension": [
+      ".js",
+      ".tsx"
+    ],
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true,
+    "all": true
+  },
+  "keywords": [
+    "deom",
+    "mocha"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "express": "^4.16.4",
+    "mocha": "^8.1.3",
+    "mochawesome": "^6.1.1",
+    "nyc": "^15.1.0",
     "socket.io": "^2.1.1"
   },
   "dependencies": {
-    "mysql": "^2.18.1"
+    "cross-env": "^7.0.2",
+    "mysql": "^2.18.1",
+    "mocha": "^3.2.0",
+    "mochawesome": "^2.0.4"
   }
 }
