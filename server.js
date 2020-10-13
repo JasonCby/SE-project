@@ -12,8 +12,8 @@ var mysql  = require('mysql');
 
 var connection = mysql.createConnection({
   host     : 'localhost',
-  user     : 'root',
-  password : '123456',
+  user     : 'Admin',
+  password : '741025',
   port: '3306',
   database: 'userinfo'
 });
@@ -612,3 +612,7 @@ const proto = {
 Object.assign(GameServer.prototype, proto);
 const gameServer = new GameServer(8001);
 gameServer.init();
+exports.time = time;
+exports.createDeskList = createDeskList;
+exports.proto = proto;
+exports.GameServer = GameServer;

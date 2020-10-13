@@ -109,7 +109,11 @@
           <div class="icon-group icon-group-left text-left" v-if="roomState.ctxPos == 'left' && roomState.state < 3">
             <span class="clock">{{roomState.timeout}}</span>
           </div>
+<<<<<<< HEAD
+          <div class="text-tips text-tips-left text-left" v-if="roomState.state < 3">Remain:{{posState.left.cards.length}}cards</div>
+=======
           <div class="text-tips text-tips-left text-left" v-if="roomState.state < 3">Remaining: {{posState.left.cards.length}}card</div>
+>>>>>>> 6c511c4aeba807bde8830dc38a9d79abc2ba61cd
 
         </div>
         <!-- 右家的牌列表 -->
@@ -120,7 +124,7 @@
           <div class="icon-group icon-group-right text-right" v-if="roomState.ctxPos == 'right' && roomState.state < 3">
             <span class="clock">{{roomState.timeout}}</span>
           </div>
-          <div class="text-tips text-tips-right text-right" v-if="roomState.state < 3">Remaining：{{posState.right.cards.length}}pieces</div>
+          <div class="text-tips text-tips-right text-right" v-if="roomState.state < 3">Remain:{{posState.right.cards.length}}cards</div>
         </div>
         <!-- 底牌列表 -->
         <div class="card-group card-group-top" :style="{width:posState.top.cards.length * 20 + 70 + 'px'}">

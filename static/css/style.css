@@ -643,7 +643,8 @@
             right: 0;
             padding: 20px;
             background: rgba(0, 0, 0, 0.3);
-            word-spacing: -5px;
+            word-spacing: 0px;
+            height: 27%;
         }
         .msg-select{
             outline: none;
@@ -660,12 +661,12 @@
             border-radius: 0px!important;
         }
         .msg-list{
-            min-height: 200px;
-            max-height: 400px;
-            overflow-x:hidden;
-            overflow-y:auto;
-            color:#fff;
-            margin-bottom:10px;
+            min-height: 85%;
+            max-height: 85%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            color: #fff;
+            margin-bottom: 10px;
             font-size: 12px;
         }
         .msg-item{
