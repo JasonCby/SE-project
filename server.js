@@ -8,6 +8,9 @@ app.get('/', function (req, res) {
 });
 const Game = require('./game.js');
 
+// update - 2020-10-12 智能出牌
+const { aiPlanning } = require('./aiPlanning');
+
 var mysql  = require('mysql');
 
 var connection = mysql.createConnection({
@@ -466,12 +469,12 @@ const proto = {
           const ctxPos = game.getContextPosId();
           const ctxScore = game.getContextScore();
           const calledScores = game.getCalledScores();
-          this.broadCastRoom('CTX_USER_CHANGE', deskId, { ctxPos, ctxScore, calledScores, timeout: 15 });
+          this.broadCastRoom('CTX_USER_CHANGE', deskId, { ctxPos, ctxScore, calledScores, timeout: 15 }); // 15
         }
         if (status == 2) {
           const topCards = game.getTopCards();
           const dizhuPosId = game.getDiZhuPosId();
-          this.broadCastRoom('SHOW_TOP_CARD', deskId, { topCards, dizhuPosId, timeout: 15 });
+          this.broadCastRoom('SHOW_TOP_CARD', deskId, { topCards, dizhuPosId, timeout: 15 }); // 15
           this.broadCastRoom('CTX_PLAY_CHANGE', deskId, {
             ctxData: {
               len: 0,
@@ -481,7 +484,7 @@ const proto = {
               posId: dizhuPosId,
             },
             posId: dizhuPosId,
-            timeout: 30,
+            timeout: 30, // 30
             isPass: false,
           })
         }
@@ -494,6 +497,65 @@ const proto = {
         }
       });
 
+      // update - 2020-10-12 智能出牌
+
+      socket.on('AUTO_PLAY_CARD', userCards => {
+        // 根据场上和自己的手牌智能提示出牌
+        const { tops, users } = userCards;
+
+        // console.log(JSON.stringify(tops) + '  ---------tops');
+
+        // console.log(JSON.stringify(users) + '  ---------users');
+
+        const data = !tops || tops.length < 1
+          ? [users[0]]
+          : aiPlanning(tops, users);
+
+        const client = this.getClient(socket);
+        if (!client) {
+          return;
+        }
+        const { deskId, posId } = client;
+
+        console.log(JSON.stringify(data) + '  ---------DATA');
+
+        const game = this.gameDatas[deskId];
+        if (game && deskId) {
+          const ret = game.validate(posId, data);
+          const isPass = !data.length;
+          const { status } = ret;
+          if (status || !data.length) {
+            game.next(posId, data);
+            this.broadCastRoom('CTX_PLAY_CHANGE', deskId, {
+              ctxData: {
+                len: data.length,
+                key: ret.key,
+                type: ret.type,
+                cards: data,
+                posId
+              },
+              posId: game.getContextPosId(),
+              timeout: 15,
+              isPass
+            })
+            socket.emit('PLAY_CARD_SUCCESS', data)
+            if (game.getStatus() === 3) {
+              this.broadCastRoom('GAME_OVER', deskId, game.getResult())
+              this.updatePosStatus(deskId, 0, 1)
+              this.updatePosStatus(deskId, 1, 1)
+              this.updatePosStatus(deskId, 2, 1)
+              game.init();
+            }
+
+            if (game.getStatus() === 5) {
+              socket.emit('PLAY_CARD_ERROR', 'The game goes wrong')
+            }
+          } else {
+            socket.emit('PLAY_CARD_ERROR', data)
+          }
+        }
+
+      });
 
       socket.on('PLAY_CARD', data => {
         const client = this.getClient(socket);
