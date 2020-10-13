@@ -10,14 +10,6 @@ const Game = require('./game.js');
 
 var mysql  = require('mysql');
 
-// var connection = mysql.createConnection({
-//   host     : 'cdb-o7lot9l2.cd.tencentcdb.com',
-//   user     : 'Admin',
-//   password : 'cby741025',
-//   port: '10171',
-//   database: 'userinfo'
-// });
-
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
