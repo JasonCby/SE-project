@@ -78,6 +78,8 @@
         <template v-if="roomState.state === 2">
           <button class="btn" @click="playCards">Play</button>
           <button class="btn" @click="passCards" v-if="roomState.ctxCard.ctxPos !== roomState.ctxPos">Discard</button>
+          <!-- update - 2020-10-12 智能出牌 -->
+          <button class="btn" @click="autoPlayCards" v-if="roomState.ctxCard.ctxPos !== roomState.ctxPos">Auto</button>
         </template>
 
       </div>
@@ -806,12 +808,26 @@
         passCards: function () {
           this.client.emit('PLAY_CARD', [])
         },
+        
+        // update - 2020-10-12 智能出牌
         autoPlayCards: function () {
           if (this.roomState.ctxPos === 'self') {
-            var cards = this.roomState.ctxCard.ctxPos === 'self' ? [this.posState.self.cards[0]] : [];
-            this.client.emit('PLAY_CARD', cards);
+
+            // 上家的牌
+            let right = this.posState.right.ctxCards;
+            let left = this.posState.left.ctxCards;
+            let tops = [];
+            if (right.length > 0) tops = right;
+            if (left.length > 0) tops = left;
+
+            // 当前用户的手牌
+            let users = this.posState.self.cards
+            users = !users || users.length < 1  ? [] : users;
+
+            this.client.emit('AUTO_PLAY_CARD', { tops, users });
           }
         },
+
         prepare: function () {
           layer.load({ type: 3 });
           this.client.emit('PREPARE');
