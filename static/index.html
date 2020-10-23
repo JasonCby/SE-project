@@ -112,6 +112,7 @@
             <span class="clock">{{roomState.timeout}}</span>
           </div>
           <div class="text-tips text-tips-left text-left" v-if="roomState.state < 3">Remain:{{posState.left.cards.length}}cards</div>
+          <div class="text-tips text-tips-left text-left" v-if="roomState.state < 3">Remaining: {{posState.left.cards.length}}card</div>
 
         </div>
         <!-- 右家的牌列表 -->
